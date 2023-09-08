@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo list</title>
+    <style>
+        body {
+        font-family: 'Courier New', monospace;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: black;
+        }
+
+        .notepad-container {
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            animation: fadeIn 0.5s;
+            height: 90vh; 
+            overflow-y: auto; 
+        }
+
+        .todo-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+            transition: background-color 0.3s;
+            font-size: 1.2em; /* Increase font size */
+        }
+
+        .todo-item.completed {
+            background-color: #f5f5f5;
+        }
+
+        .delete-button, .complete-button {
+            font-family: 'Courier New', monospace;
+            font-size: 1em; /* Adjust button font size */
+        }
+
+        .delete-button {
+            background-color: #ff6347;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .delete-button:hover {
+            background-color: #e74c3c;
+        }
+
+        .complete-button {
+            background-color: #00bfff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .complete-button:hover {
+            background-color: #0099cc;
+        }
+
+        .add-todo {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .add-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            font-family: 'Courier New', monospace; /* Match font */
+        }
+
+        .add-button {
+            background-color: #00bfff;
+            color: #fff;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-button:hover {
+            background-color: #0099cc;
+        }
+
+        .clear-button {
+            background-color: #ff6347;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .clear-button:hover {
+            background-color: #e74c3c;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 0 0 20px;
+            font-size: 2em;
+            color: #2d3436; 
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="notepad-container">
+        <h2>Todo </h2>
+        <ul class="todo-list">
+            <li v-for="(todo, index) in todos" :key="index" :class="{ completed: todo.completed }" class="todo-item">
+                <div>
+                    <strong>{{ todo.text }}</strong>
+                    <p v-if="todo.description">{{ todo.description }}</p>
+                </div>
+                <button class="delete-button" @click="deleteTodo(index)">Delete</button>
+                <button class="complete-button" @click="toggleCompleted(index)">
+                    {{ todo.completed ? 'Undo' : 'Complete' }}
+                </button>
+            </li>
+        </ul>
+        <div class="add-todo">
+            <input class="add-input" v-model="newTodo.text" @keyup.enter="addTodo" placeholder="Add a new task...">
+            <input class="add-input" v-model="newTodo.description" placeholder="Add a description...">
+            <button class="add-button" @click="addTodo">Add</button>
+        </div>
+        <button class="clear-button" @click="clearCompleted">Clear Completed Tasks</button>
+    </div>
+    
+    <script src="https://unpkg.com/vue@3.2.29/dist/vue.global.prod.js"></script>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    todos: [
+                        { text: 'Task 1', description: 'Description for Task 1', completed: false },
+                        { text: 'Task 2', description: 'Description for Task 2', completed: true },
+                        { text: 'Task 3', description: 'Description for Task 3', completed: false }
+                    ],
+                    newTodo: {
+                        text: '',
+                        description: ''
+                    }
+                };
+            },
+            methods: {
+                addTodo() {
+                    if (this.newTodo.text.trim() !== '') {
+                        this.todos.push({ text: this.newTodo.text, description: this.newTodo.description, completed: false });
+                        this.newTodo.text = '';
+                        this.newTodo.description = '';
+                    }
+                },
+                deleteTodo(index) {
+                    this.todos.splice(index, 1);
+                },
+                toggleCompleted(index) {
+                    this.todos[index].completed = !this.todos[index].completed;
+                },
+                clearCompleted() {
+                    this.todos = this.todos.filter(todo => !todo.completed);
+                }
+            }
+        });
+    
+    app.mount('#app');
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+

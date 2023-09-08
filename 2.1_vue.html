@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 3 Experimentation</title>
+    <!-- Include Vue 3 from CDN -->
+    <script src="https://unpkg.com/vue@3.2.29/dist/vue.global.prod.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <!-- Conditional Rendering -->
+    <div>
+        <h2>Buy if:</h2>
+        <div>
+            <p v-if="showIf">Expense is less than $25.</p>
+            <p v-else>This is rendered using v-else.</p>
+        </div>
+        <div>
+            <p v-show="showShow">Things to buy from Coles</p>
+        </div>
+        <div>
+            <ul>
+                <li v-for="item in items" :key="item.id">{{ item.name }}</li>
+            </ul>
+        </div>
+        <div>
+            <p v-for="(item, index) in itemsWithIf" :key="item.id" v-if="index % 2 === 0">{{ item.name }}</p>
+        </div>
+    </div>
+
+    <!-- Form Input Handling -->
+    <div>
+        <h2>Add to list</h2>
+        <input type="text" v-model="inputValue" placeholder="Type something...">
+        <p>You typed: {{ inputValue }}</p>
+    </div>
+</div>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                showIf: true,
+                showShow: true,
+                items: [
+                    { id: 1, name: 'milk' },
+                    { id: 2, name: 'bread' },
+                    { id: 3, name: 'coffee ' },
+                ],
+                inputValue: '',
+            };
+        },
+        computed: {
+            itemsWithIf() {
+                return this.items.filter((item, index) => index % 2 === 0);
+            },
+        },
+    });
+
+    app.mount('#app');
+</script>
+
+</body>
+</html>
+
